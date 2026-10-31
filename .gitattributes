@@ -1,0 +1,12 @@
+* text=auto
+
+# Used inside WSL, where CRLF breaks them
+*.sh text eol=lf
+*_cali_table text eol=lf
+
+*.bmodel binary
+*.onnx binary
+*.pt binary
+
+# Conversion logs contain raw progress-bar carriage returns; keep them byte-exact
+*.log -text
