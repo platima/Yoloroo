@@ -57,15 +57,24 @@ harder than test.
 
 ## Dataset
 
-The photos are not in this repo. `scripts/fetch_raw.sh` and `scripts/build_dataset.py` download them
-and build `data/kangaroo/` (YOLO format):
+The training data is not in this repo. It comes from these sources, which keep their own terms:
 
-- **experiencor/kangaroo**: 164 VOC-annotated photos (3 dropped: 2 EXIF-rotated, 1 truncated), split 80/10/10.
-- **Open Images V7**, class `/m/04c0y` Kangaroo: 485 images after dropping 59 with group-of or
-  depiction boxes (e.g. road signs). OI train → train with a 10% val holdout; OI validation → val; OI test → test.
-- **Background images**: about 15% extra Open Images photos of deer, dogs, goats, horses, rabbits,
+- [**experiencor/kangaroo**](https://github.com/experiencor/kangaroo): 164 VOC-annotated photos (3 dropped:
+  2 EXIF-rotated, 1 truncated), split 80/10/10. That repo states no licence.
+- [**Open Images V7**](https://storage.googleapis.com/openimages/web/index.html),
+  [Kangaroo class](https://storage.googleapis.com/openimages/web/visualizer/index.html?type=detection&set=train&c=%2Fm%2F04c0y)
+  (`/m/04c0y`): 485 images after dropping 59 with group-of or depiction boxes (e.g. road signs).
+  OI train → train with a 10% val holdout; OI validation → val; OI test → test.
+- **Open Images background photos**: about 15% extra images of deer, dogs, goats, horses, rabbits,
   sheep, cattle, foxes and ostriches with no kangaroo, to cut false positives on look-alikes.
-- **Grayscale copies** of 15% of train positives, a rough stand-in for the Ovis IR night mode.
+
+[Open Images' terms](https://storage.googleapis.com/openimages/web/factsfigures_v7.html) license the
+annotations under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) and list the images as
+[CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), but Google does not verify each image's licence.
+
+`scripts/fetch_raw.sh` and `scripts/build_dataset.py` download these sources and build `data/kangaroo/`
+(YOLO format). The build also adds grayscale copies of 15% of train positives, a rough stand-in for the
+Ovis IR night mode.
 
 Totals: train 552 images (+74 grayscale), val 86, test 80; 200 train images used for INT8 calibration (`data/calib/`).
 
@@ -134,17 +143,17 @@ Use `wsl --exec`, not `wsl -- bash -lc '…'`: the latter expands `$variables` i
 
 ## Licensing
 
-The `LICENSE` file (MIT) covers the scripts and documentation written for this repo. It does not
-cover the following:
+Copyright (C) 2026 Platima. Licensed under [AGPL-3.0](LICENSE).
 
-- **Model files in `dist/`** (`.bmodel`, `.onnx`, `.pt`) are derived from Ultralytics YOLOv8.
-  Ultralytics licenses YOLOv8 and models built with it under
-  [AGPL-3.0](https://ultralytics.com/license) or a commercial licence, and that tag is embedded in
-  the checkpoint and ONNX metadata.
+The model files in `dist/` (`.bmodel`, `.onnx`, `.pt`) are built on Ultralytics YOLOv8, which
+Ultralytics licenses under [AGPL-3.0 or a commercial licence](https://www.ultralytics.com/license),
+so the whole repo uses the same terms.
+
+These are not part of this repo and keep their own terms:
+
 - **Ovis export script**: the Ovis SDK publishes no licence, so `fetch_raw.sh` downloads the script
   from the SDK at a pinned commit rather than including it here.
-- **Training photos** are not redistributed. Open Images annotations are CC BY 4.0 and its images
-  are listed as CC BY 2.0 (Flickr). The experiencor/kangaroo repo states no licence.
+- **Training data**: see [Dataset](#dataset).
 
 ## Layout
 
