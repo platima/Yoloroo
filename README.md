@@ -13,6 +13,7 @@ OVIS Web as **Object Detection → YOLOv8** (`detection.yolov8`).
 |---|---|---|---|
 | `yolov8n_kangaroo_cv184x_int8_640x640.bmodel` | 1×3×640×640 | 3.76 MB | Default; matches the guide |
 | `yolov8n_kangaroo_cv184x_int8_384x640.bmodel` | 1×3×384×640 | 3.71 MB | 16:9 / 1080p streams (less padding, faster) |
+| `yolov8n_kangaroo_cv184x_int8_544x960.bmodel` | 1×3×544×960 | 3.80 MB | **Best for distant/small kangaroos**; trained at 960 with strong zoom-out augmentation. Set AI input frame size to 960×540 |
 
 - Classes (training-index order): `0 = kangaroo` (see `dist/classes.txt`)
 - Both files are well under the 13 MB limit. A YOLOv8s build was measured at 12.1 MB, which fits but
@@ -33,6 +34,8 @@ IoU-aligned scoring peaks around a logit of 2.2, and the INT8 class output moves
 0.21–0.37 logits. So thresholds above ~0.85 will drop almost everything.
 
 ## Accuracy
+
+The 544×960 model scores 0.799 mAP50 / 0.582 mAP50-95 on val and 0.903 / 0.678 on test (INT8, simulator, 960×540 frames). The 384×640 model scored 0.772 / 0.543 and 0.914 / 0.660 on the same photos at 640×360 frames. Val has the small kangaroos, so that is the gain; it did not fire on a rainy empty-scene frame. The tables below are for the first two models.
 
 INT8 numbers come from the TPU-MLIR CV184x cmodel simulator, running the actual `.bmodel` with the
 converter's own preprocessing (centre letterbox, RGB, ×1/255) and the raw 6-branch YOLOv8 decode

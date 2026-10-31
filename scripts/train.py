@@ -13,6 +13,7 @@ if __name__ == "__main__":
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--imgsz", type=int, default=640)
     ap.add_argument("--name", default="yolov8n_kangaroo")
+    ap.add_argument("--scale", type=float, default=0.5, help="zoom augmentation; 0.9 makes many tiny kangaroos")
     args = ap.parse_args()
 
     model = YOLO(ROOT / "weights" / args.model)
@@ -23,6 +24,8 @@ if __name__ == "__main__":
         imgsz=args.imgsz,
         batch=args.batch,
         workers=8,
+        scale=args.scale,
+        close_mosaic=20,
         cache="ram",
         seed=0,
         project=str(ROOT / "runs"),
